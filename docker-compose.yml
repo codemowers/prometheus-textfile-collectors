@@ -14,7 +14,7 @@ services:
       - '/:/host:ro,rslave'
 
   collectors:
-    image: kspaceee:prometheus-textfile-collectors
+    image: kspaceee/prometheus-textfile-collectors
     restart: always
     network_mode: none
     privileged: true
