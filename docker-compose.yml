@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  app:
+    restart: always
+    image: quay.io/prometheus/node-exporter:latest
+    command:
+      - --path.rootfs=/host
+      - --collector.textfile.directory=/host/run/node-exporter
+    network_mode: host
+    pid: host
+    restart: always
+    volumes:
+      - '/:/host:ro,rslave'
+
+  collectors:
+    image: kspaceee:prometheus-textfile-collectors
+    restart: always
+    network_mode: none
+    privileged: true
+    volumes:
+      - '/dev:/dev'
+      - '/sys:/sys:ro,rslave'
+      - '/run/node-exporter:/run/node-exporter'
+
