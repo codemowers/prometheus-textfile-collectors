@@ -14,4 +14,4 @@ See supplied `docker-compose.yml`
 
 Don't forget to add some `iptables` rules for protecting the node exporter endpoint.
 
-![Still waiting for bearer token](https://imgflip.com/i/5d21t5)
+![Still waiting for Prometheus devs to add bearer token support](https://i.imgflip.com/5d21t5.jpg)
