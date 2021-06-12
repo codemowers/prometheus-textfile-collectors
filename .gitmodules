@@ -1,0 +1,3 @@
+[submodule "node-exporter-textfile-collector-scripts"]
+	path = node-exporter-textfile-collector-scripts
+	url = https://github.com/prometheus-community/node-exporter-textfile-collector-scripts
