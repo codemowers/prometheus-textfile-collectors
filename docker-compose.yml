@@ -3,7 +3,7 @@ version: '3.7'
 services:
   app:
     restart: always
-    image: quay.io/prometheus/node-exporter:latest
+    image: prom/node-exporter:latest
     command:
       - --path.rootfs=/host
       - --collector.textfile.directory=/host/run/node-exporter
@@ -14,7 +14,7 @@ services:
       - '/:/host:ro,rslave'
 
   collectors:
-    image: kspaceee/prometheus-textfile-collectors
+    image: kspaceee/prometheus-textfile-collectors:latest
     restart: always
     network_mode: none
     privileged: true
