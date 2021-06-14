@@ -7,7 +7,11 @@ such as SMART metrics, NVMe metrics etc.
 
 # Deploying
 
-See supplied `docker-compose.yml`
+See supplied `docker-compose.yml` and launch:
+
+```
+docker-compose --project-name prometheus_node_exporter up -d
+```
 
 
 # Security
