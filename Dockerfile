@@ -5,7 +5,8 @@ RUN apk add --no-cache \
     jq \
     nvme-cli \
     bash \
-    hwids-pci
+    hwids-pci \
+    ipmitool
 
 COPY node-exporter-textfile-collector-scripts /scripts
 COPY entrypoint.sh /entrypoint.sh
