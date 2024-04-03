@@ -14,7 +14,7 @@ services:
       - '/:/host:ro,rslave'
 
   collectors:
-    image: kspaceee/prometheus-textfile-collectors:latest
+    image: codemowers/prometheus-textfile-collectors:latest
     restart: always
     network_mode: none
     privileged: true
