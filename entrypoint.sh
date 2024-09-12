@@ -27,7 +27,7 @@ while true; do
   fi
 
   if [ ! -z $lvm_enabled ]; then
-      /scripts/lvm-prom-collector > lvm.prom.part
+      /scripts/lvm-prom-collector -g -p > lvm.prom.part
   fi
 
   for j in *.part; do
