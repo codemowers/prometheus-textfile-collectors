@@ -9,12 +9,13 @@ services:
       - --collector.textfile.directory=/host/run/node-exporter
     network_mode: host
     pid: host
-    restart: always
     volumes:
       - '/:/host:ro,rslave'
 
   collectors:
     image: codemowers/prometheus-textfile-collectors:latest
+    build:
+      context: .
     restart: always
     network_mode: none
     privileged: true
