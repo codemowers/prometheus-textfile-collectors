@@ -2,17 +2,17 @@
 cd /run/node-exporter/
 rm -f *.prom
 
-if [[ -f /sys/module/dm_mod ]]; then
+if [[ -e /sys/module/dm_mod ]]; then
     lvm_enabled=1
 fi
 
-if [[ -f /dev/ipmi0 ]]; then
+if [[ -e /dev/ipmi0 ]]; then
     ipmi_enabled=1
 fi
-if [[ -f /dev/ipmi/0 ]]; then
+if [[ -e /dev/ipmi/0 ]]; then
     ipmi_enabled=1
 fi
-if [[ -f /dev/ipmidev/0 ]]; then
+if [[ -e /dev/ipmidev/0 ]]; then
     ipmi_enabled=1
 fi
 
