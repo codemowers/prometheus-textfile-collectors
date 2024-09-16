@@ -5,12 +5,20 @@ services:
     restart: always
     image: prom/node-exporter:latest
     command:
-      - --path.rootfs=/host
-      - --collector.textfile.directory=/host/run/node-exporter
+      - --no-collector.fibrechannel
+      - --no-collector.infiniband
+      - --no-collector.tapestats
+      - --no-collector.wifi
+      - --collector.textfile.directory=/run/node-exporter
+      - --collector.diskstats.ignored-devices=^(sr|loop)[0-9][0-9]*$
     network_mode: host
     pid: host
     volumes:
-      - '/:/host:ro,rslave'
+      - '/etc/os-release:/etc/os-release:ro'
+      - '/sys:/sys:ro'
+      - '/proc:/proc'
+      - '/run/udev/data:/run/udev/data:ro'
+      - '/run/node-exporter:/run/node-exporter:ro'
 
   collectors:
     image: codemowers/prometheus-textfile-collectors:latest
@@ -23,4 +31,3 @@ services:
       - '/dev:/dev'
       - '/sys:/sys:ro,rslave'
       - '/run/node-exporter:/run/node-exporter'
-
