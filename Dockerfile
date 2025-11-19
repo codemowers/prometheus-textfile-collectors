@@ -7,13 +7,12 @@ RUN apk add --no-cache \
     bash \
     hwids-pci \
     ipmitool \
-    lvm2
-RUN pip install prometheus-client
-
-COPY node-exporter-textfile-collector-scripts /scripts
+    lvm2 \
+ && pip install prometheus-client
+COPY node-exporter-textfile-collector-scripts/smartmon.py /scripts/
+COPY node-exporter-textfile-collector-scripts/nvme_metrics.py /scripts/
+COPY node-exporter-textfile-collector-scripts/ipmitool /scripts/
+COPY node-exporter-textfile-collector-scripts/lvm-prom-collector /scripts/
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-RUN test -f /scripts/smartmon.py
-RUN test -f /scripts/nvme_metrics.sh
-RUN test -f /scripts/ipmitool
-ENTRYPOINT /entrypoint.sh
+WORKDIR /run/node-exporter/
+ENTRYPOINT ["/entrypoint.sh"]
