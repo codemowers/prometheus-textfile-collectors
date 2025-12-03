@@ -1,41 +1,53 @@
 #!/bin/bash
 
-# Define all scripts with their conditions and commands
-declare -A scripts
-scripts[smart]="/scripts/smartmon.py"
-scripts[nvme]="/scripts/nvme_metrics.py"
+# Determine which scripts should run
+RUN_SMART=true
+RUN_NVME=true
+RUN_LVM=false
+RUN_IPMITOOL=false
 
 # Check for LVM support
 if [[ -e /sys/module/dm_mod ]]; then
-    scripts[lvm]="/scripts/lvm-prom-collector -g -p"
+    RUN_LVM=true
 fi
 
 # Check for IPMI support
 if [[ -e /dev/ipmi0 ]] || [[ -e /dev/ipmi/0 ]] || [[ -e /dev/ipmidev/0 ]]; then
-    scripts[ipmitool]="ipmitool sensor | /scripts/ipmitool"
+    RUN_IPMITOOL=true
 fi
 
 # Clean up old prometheus files
-for script_name in "${!scripts[@]}"; do
-    rm -f "${script_name}.prom"
-done
+rm -f smart.prom nvme.prom lvm.prom ipmitool.prom impitool.prom
 
-echo "Enabled scripts: ${!scripts[*]}"
+echo "Enabled scripts:"
+if $RUN_SMART; then echo "- smart"; fi
+if $RUN_NVME; then echo "- nvme"; fi
+if $RUN_LVM; then echo "- lvm"; fi
+if $RUN_IPMITOOL; then echo "- ipmitool"; fi
 
 while true; do
   THEN=$(date +%s)
 
-  # Run all enabled scripts
-  for script_name in "${!scripts[@]}"; do
-      ${scripts[$script_name]} > "${script_name}.prom.part"
-  done
+  # Run enabled scripts
+  if $RUN_SMART; then
+      /scripts/smartmon.py > smart.prom.part
+      mv smart.prom.part smart.prom
+  fi
 
-  # Move all .part files to final names
-  for script_name in "${!scripts[@]}"; do
-      if [[ -f "${script_name}.prom.part" ]]; then
-          mv "${script_name}.prom.part" "${script_name}.prom"
-      fi
-  done
+  if $RUN_NVME; then
+      /scripts/nvme_metrics.py > nvme.prom.part
+      mv nvme.prom.part nvme.prom
+  fi
+
+  if $RUN_LVM; then
+      /scripts/lvm-prom-collector -g -p > lvm.prom.part
+      mv lvm.prom.part lvm.prom
+  fi
+
+  if $RUN_IPMITOOL; then
+      ipmitool sensor | /scripts/ipmitool > ipmitool.prom.part
+      mv ipmitool.prom.part ipmitool.prom
+  fi
 
   ELAPSED=$(( $(date +%s) - $THEN ))
   SLEEP_TIME=$(( 30 - $ELAPSED ))
